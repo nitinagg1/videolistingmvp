@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+
     defaultConfig {
         applicationId "com.mn2square.videolistingmvp"
-        minSdkVersion 14
-        targetSdkVersion 22
+        minSdkVersion 17
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -17,22 +18,32 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+//        targetCompatibility 1.8
+//        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    })
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
+//    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+//    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
-    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
 
-    testCompile 'junit:junit:4.12'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.github.ksoichiro:android-observablescrollview:1.6.0'
+
+    implementation'uk.co.chrisjenx:calligraphy:2.2.0'
+
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:1.0.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+
+    testImplementation 'junit:junit:4.12'
 }
