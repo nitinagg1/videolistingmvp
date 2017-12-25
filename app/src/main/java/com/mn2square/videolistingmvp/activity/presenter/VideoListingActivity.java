@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mn2square.videolistingmvp.R;
-import com.mn2square.videolistingmvp.mvvm.MvvmVideoListActivity;
 import com.mn2square.videolistingmvp.swipetabfragments.ListFragement.presenter.ListFragmentImpl;
 import com.mn2square.videolistingmvp.swipetabfragments.SavedListFragment.presenter.SavedListFragmentImpl;
 import com.mn2square.videolistingmvp.swipetabfragments.folderlistfragment.presenter.FolderListFragmentImpl;
@@ -214,7 +213,7 @@ public class VideoListingActivity extends AppCompatActivity
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(SORT_TYPE_PREFERENCE_KEY, sortType);
         editor.apply();
-         mVideoListManagerImpl.getVideosWithNewSorting(sortType, getLoaderManager());
+         mVideoListManagerImpl.getVideosWithNewSorting(sortType);
 
     }
 
@@ -309,7 +308,7 @@ public class VideoListingActivity extends AppCompatActivity
                                 if (deletedSuccessfully) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-                                        MediaScannerConnection.scanFile(MvvmVideoListActivity.this,
+                                        MediaScannerConnection.scanFile(VideoListingActivity.this,
                                                 new String[]{videoPath}, null, null);
 
                                     } else {
