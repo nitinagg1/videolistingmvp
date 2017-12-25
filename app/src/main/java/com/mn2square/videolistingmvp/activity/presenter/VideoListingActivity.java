@@ -1,8 +1,13 @@
 package com.mn2square.videolistingmvp.activity.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -11,9 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.mn2square.videolistingmvp.R;
+import com.mn2square.videolistingmvp.mvvm.MvvmVideoListActivity;
 import com.mn2square.videolistingmvp.swipetabfragments.ListFragement.presenter.ListFragmentImpl;
 import com.mn2square.videolistingmvp.swipetabfragments.SavedListFragment.presenter.SavedListFragmentImpl;
 import com.mn2square.videolistingmvp.swipetabfragments.folderlistfragment.presenter.FolderListFragmentImpl;
@@ -25,6 +32,8 @@ import com.mn2square.videolistingmvp.activity.presenter.manager.VideoListManager
 import com.mn2square.videolistingmvp.activity.views.VideoListingViewImpl;
 import com.mn2square.videolistingmvp.activity.views.ViewMvpSearch;
 import com.mn2square.videolistingmvp.utils.longpressmenuoptions.LongPressOptions;
+
+import java.io.File;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -205,7 +214,7 @@ public class VideoListingActivity extends AppCompatActivity
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(SORT_TYPE_PREFERENCE_KEY, sortType);
         editor.apply();
-        mVideoListManagerImpl.getVideosWithNewSorting(sortType);
+         mVideoListManagerImpl.getVideosWithNewSorting(sortType, getLoaderManager());
 
     }
 
@@ -281,7 +290,7 @@ public class VideoListingActivity extends AppCompatActivity
     }
 
     @Override
-    public void onVideoLongPressed(String videoPath, int itemId) {
+    public void onVideoLongPressed(final String videoPath, int itemId) {
 
         switch (itemId)
         {
@@ -290,8 +299,30 @@ public class VideoListingActivity extends AppCompatActivity
                 break;
 
             case R.id.long_press_menu_delete:
-                int deleteVideoId = mVideoListInfo.getVideoIdHashMap().get(videoPath);
-                LongPressOptions.deleteFile(this, videoPath, deleteVideoId, mVideoListManagerImpl);
+                final int deleteVideoId = mVideoListInfo.getVideoIdHashMap().get(videoPath);
+                LongPressOptions.deleteFile(this, videoPath, deleteVideoId,
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                File fileToDelete = new File(videoPath);
+                                boolean deletedSuccessfully = fileToDelete.delete();
+                                if (deletedSuccessfully) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+                                        MediaScannerConnection.scanFile(MvvmVideoListActivity.this,
+                                                new String[]{videoPath}, null, null);
+
+                                    } else {
+                                        VideoListingActivity.this.sendBroadcast(new Intent(
+                                                Intent.ACTION_MEDIA_MOUNTED,
+                                                Uri.parse("file://"
+                                                        + Environment.getExternalStorageDirectory())));
+                                    }
+                                    mVideoListManagerImpl.updateForDeleteVideo(deleteVideoId);
+                                }
+
+                            }
+                        });
                 Log.d("nitin123", "we are here");
                 break;
 
@@ -300,6 +331,7 @@ public class VideoListingActivity extends AppCompatActivity
                 int index = selectedVideoTitleWithExtension.lastIndexOf('.');
                 String selectedVideoTitleForRename;
                 String extensionValue;
+
                 if (index > 0) {
                     selectedVideoTitleForRename = selectedVideoTitleWithExtension.substring(0, index);
                     extensionValue = selectedVideoTitleWithExtension.substring(index, selectedVideoTitleWithExtension.length());
@@ -308,9 +340,31 @@ public class VideoListingActivity extends AppCompatActivity
                     extensionValue = "";
                 }
 
-                int renameVideoId = mVideoListInfo.getVideoIdHashMap().get(videoPath);
+                final String ImmutableVideoTitleForRename = selectedVideoTitleForRename;
+                final String ImmutableExtensionValue = extensionValue;
+
+                final int renameVideoId = mVideoListInfo.getVideoIdHashMap().get(videoPath);
                 LongPressOptions.renameFile(this, selectedVideoTitleForRename, videoPath,
-                        extensionValue, renameVideoId, mVideoListManagerImpl);
+                        extensionValue, renameVideoId, new LongPressOptions.OnConfirmRenameListener() {
+                            @Override
+                            public void onConfirm(String filename) {
+                                Context context = VideoListingActivity.this;
+                                File fileToRename = new File(ImmutableVideoTitleForRename);
+                                File fileNameNew = new File(ImmutableVideoTitleForRename.replace(
+                                        ImmutableVideoTitleForRename, filename));
+                                if(fileNameNew.exists()) {
+                                    Toast.makeText(context,
+                                            context.getResources().getString(R.string.same_title_exists), Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    String updatedTitle = filename + ImmutableExtensionValue;
+                                    fileToRename.renameTo(fileNameNew);
+
+                                    String newFilePath = fileNameNew.toString();
+                                    mVideoListManagerImpl.updateForRenameVideo(renameVideoId, newFilePath, updatedTitle);
+                                }
+                            }
+                        });
                 break;
         }
 
