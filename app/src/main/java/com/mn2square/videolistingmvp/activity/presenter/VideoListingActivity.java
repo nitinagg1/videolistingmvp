@@ -75,6 +75,7 @@ public class VideoListingActivity extends AppCompatActivity
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         mSortingType = settings.getInt(SORT_TYPE_PREFERENCE_KEY, 3);
         mVideoListManagerImpl = new VideoListManagerImpl(this, mSortingType);
+        mVideoListManagerImpl.initLoader(getLoaderManager());
         mVideoListManagerImpl.registerListener(this);
     }
 
@@ -213,7 +214,7 @@ public class VideoListingActivity extends AppCompatActivity
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(SORT_TYPE_PREFERENCE_KEY, sortType);
         editor.apply();
-         mVideoListManagerImpl.getVideosWithNewSorting(sortType);
+         mVideoListManagerImpl.getVideosWithNewSorting(sortType, getLoaderManager());
 
     }
 

@@ -42,7 +42,6 @@ public class VideoListManagerImpl implements LoaderManager.LoaderCallbacks<Curso
     private static final String TAG = "videolistmvp";
 
     private Context mContext;
-    private AppCompatActivity mAppCompatActivity;
 
     private VideoListManagerListener mVideoListManagerListerner;
 
@@ -50,14 +49,14 @@ public class VideoListManagerImpl implements LoaderManager.LoaderCallbacks<Curso
 
     private int mSortingPreference;
 
-    public VideoListManagerImpl(Context context, int sortingPreference)
-    {
+    public VideoListManagerImpl(Context context, int sortingPreference) {
         mContext = context;
         mSortingPreference = sortingPreference;
+    }
 
-        mAppCompatActivity = (AppCompatActivity)context;
-        mAppCompatActivity.getLoaderManager().initLoader(URL_LOADER_EXTERNAL, null, this);
-
+    @Override
+    public void initLoader(LoaderManager loaderManager) {
+        loaderManager.initLoader(URL_LOADER_EXTERNAL, null, this);
         mVideoListInfo = new VideoListInfo();
     }
 
@@ -133,10 +132,9 @@ public class VideoListManagerImpl implements LoaderManager.LoaderCallbacks<Curso
     }
 
     @Override
-    public void getVideosWithNewSorting(int sortType) {
-
+    public void getVideosWithNewSorting(int sortType, LoaderManager loaderManager) {
         mSortingPreference = sortType;
-        mAppCompatActivity.getLoaderManager().restartLoader(URL_LOADER_EXTERNAL, null, this);
+        loaderManager.restartLoader(URL_LOADER_EXTERNAL, null, this);
     }
 
     @Override
