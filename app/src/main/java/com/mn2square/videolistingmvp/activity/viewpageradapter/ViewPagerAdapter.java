@@ -37,17 +37,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        switch (position) {
-            case 0:
-                return new FolderListFragmentImpl();
-            case 1:
-                return new ListFragmentImpl();
-            case 2:
-                return new SavedListFragmentImpl();
-            default:
-                return new ListFragmentImpl();
+        return new Fragment();
+//        switch (position) {
+//            case 0:
+//                return new FolderListFragmentImpl();
+//            case 1:
+//                return new ListFragmentImpl();
+//            case 2:
+//                return new SavedListFragmentImpl();
+//            default:
+//                return new ListFragmentImpl();
 
-        }
+//        }
     }
 
     @Override
