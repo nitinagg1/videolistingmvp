@@ -37,7 +37,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        return new Fragment();
+        return new com.mn2square.videolistingmvp.mvvm.swipetabfragments.ListFragment.ListFragmentImpl();
+//        return new Fragment();
 //        switch (position) {
 //            case 0:
 //                return new FolderListFragmentImpl();
