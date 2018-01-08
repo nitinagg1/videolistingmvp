@@ -116,7 +116,7 @@ public class ListFragmentImpl extends Fragment {
         //TODO: should handle the selectedVideo using View-ViewModel dance
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         String selectedVideo = mListFragmentViewModel.mVideoListInfoLiveData
-                .getValue().getVideosList().get(info.position);
+                .getValue().getVideosList().get(info.position - 1);
         menu.setHeaderTitle(selectedVideo);
         MenuInflater menuInflater = getActivity().getMenuInflater();
         menuInflater.inflate(R.menu.menu_video_long_press, menu);
