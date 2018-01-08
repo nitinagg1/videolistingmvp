@@ -110,7 +110,7 @@ public class FolderListAdapter extends BaseExpandableListAdapter {
 
         parent_txtView.setText(lastPartOfTitle);
         folderVideoCount.setText(videoCount + "");
-        String folderPath =  group_title.substring(0,lastIndexOf);
+        String folderPath =  group_title.substring(0,lastIndexOf + 1);
         folderPath_txtView.setText(folderPath);
 
         return convertView;
