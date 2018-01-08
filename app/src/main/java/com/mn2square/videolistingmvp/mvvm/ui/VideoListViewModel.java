@@ -73,7 +73,7 @@ public class VideoListViewModel extends AndroidViewModel {
 
     }
 
-    public void updateSharedPreferenceAndGetNewList(int sortType, LoaderManager loaderManager) {
+    public void onSortTypeChanged(int sortType, LoaderManager loaderManager) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(SORT_TYPE_PREFERENCE_KEY, sortType);

@@ -331,31 +331,31 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         switch (id)
         {
             case R.id.sort_name_asc:
-                updateSharedPreferenceAndGetNewList(VideoListViewModel.NAME_ASC);
+                onSortTypeChanged(VideoListViewModel.NAME_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_name_dsc:
-                updateSharedPreferenceAndGetNewList(VideoListViewModel.NAME_DESC);
+                onSortTypeChanged(VideoListViewModel.NAME_DESC);
                 item.setChecked(true);
                 break;
             case R.id.sort_date_asc:
-                updateSharedPreferenceAndGetNewList(VideoListViewModel.DATE_ASC);
+                onSortTypeChanged(VideoListViewModel.DATE_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_date_dsc:
-                updateSharedPreferenceAndGetNewList(VideoListViewModel.DATE_DESC);
+                onSortTypeChanged(VideoListViewModel.DATE_DESC);
                 item.setChecked(true);
                 break;
             case R.id.sort_size_asc:
-                updateSharedPreferenceAndGetNewList(VideoListViewModel.SIZE_ASC);
+                onSortTypeChanged(VideoListViewModel.SIZE_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_size_dsc:
-                updateSharedPreferenceAndGetNewList(VideoListViewModel.SIZE_DESC);
+                onSortTypeChanged(VideoListViewModel.SIZE_DESC);
                 item.setChecked(true);
                 break;
             default:
-                updateSharedPreferenceAndGetNewList(VideoListViewModel.DATE_DESC);
+                onSortTypeChanged(VideoListViewModel.DATE_DESC);
                 item.setChecked(true);
         }
         if (id == R.id.action_settings) {
@@ -364,8 +364,8 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateSharedPreferenceAndGetNewList(int sortType) {
-        mViewModel.updateSharedPreferenceAndGetNewList(sortType, getLoaderManager());
+    private void onSortTypeChanged(int sortType) {
+        mViewModel.onSortTypeChanged(sortType, getLoaderManager());
     }
 
     @Override
