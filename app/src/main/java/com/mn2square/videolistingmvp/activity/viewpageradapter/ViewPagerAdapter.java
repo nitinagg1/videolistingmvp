@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.mn2square.videolistingmvp.mvvm.swipetabfragments.folderlistfragment.FolderListFragmentImpl;
 import com.mn2square.videolistingmvp.mvvm.swipetabfragments.listfragment.ListFragmentImpl;
-import com.mn2square.videolistingmvp.swipetabfragments.folderlistfragment.presenter.FolderListFragmentImpl;
 
 /**
  * Created by nitinagarwal on 3/15/17.
@@ -38,8 +38,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-//                return new FolderListFragmentImpl();
-                return new ListFragmentImpl();
+                return new FolderListFragmentImpl();
             case 1:
                 return new ListFragmentImpl();
 //            case 2:
