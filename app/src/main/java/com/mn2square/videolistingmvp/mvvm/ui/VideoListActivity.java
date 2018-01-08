@@ -258,11 +258,6 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         }
     }
 
-    /**
-     * We should also put the implementation for this function in the ViewModel
-     * ideally, there should be a LiveData<boolean> that controls the opening and closing of this Drawer to make
-     * the UI logic testable
-     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
