@@ -1,13 +1,13 @@
-package com.mn2square.videolistingmvp.mvvm.swipetabfragments.listfragment;
+package com.mn2square.videolistingmvp.mvvm.ui.listfragment;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.mn2square.videolistingmvp.R;
-import com.mn2square.videolistingmvp.mvvm.VideoUserInteraction;
+import com.mn2square.videolistingmvp.mvvm.ui.VideoUserInteraction;
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
-import com.mn2square.videolistingmvp.mvvm.MvvmVideoListActivity;
-import com.mn2square.videolistingmvp.mvvm.swipetabfragments.adapters.VideoListAdapter;
+import com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListActivity;
+import com.mn2square.videolistingmvp.mvvm.ui.adapters.VideoListAdapter;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -23,7 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.TAG;
+import static com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListViewModel.TAG;
 
 public class ListFragmentImpl extends Fragment {
     View mFragemntVideoListView;

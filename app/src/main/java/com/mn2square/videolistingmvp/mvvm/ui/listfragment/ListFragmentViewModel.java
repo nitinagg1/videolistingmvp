@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.mvvm.swipetabfragments.listfragment;
+package com.mn2square.videolistingmvp.mvvm.ui.listfragment;
 
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepositoryImpl;

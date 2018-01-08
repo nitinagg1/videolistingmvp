@@ -1,13 +1,13 @@
-package com.mn2square.videolistingmvp.mvvm;
+package com.mn2square.videolistingmvp.mvvm.ui;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.mn2square.videolistingmvp.mvvm.swipetabfragments.folderlistfragment.FolderListFragmentImpl;
-import com.mn2square.videolistingmvp.mvvm.swipetabfragments.listfragment.ListFragmentImpl;
-import com.mn2square.videolistingmvp.mvvm.swipetabfragments.savedlistfragment.SavedListFragmentImpl;
+import com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment.FolderListFragmentImpl;
+import com.mn2square.videolistingmvp.mvvm.ui.listfragment.ListFragmentImpl;
+import com.mn2square.videolistingmvp.mvvm.ui.savedlistfragment.SavedListFragmentImpl;
 
 /**
  * Created by nitinagarwal on 3/15/17.

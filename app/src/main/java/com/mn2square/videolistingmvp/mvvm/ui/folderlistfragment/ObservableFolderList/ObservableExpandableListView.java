@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.mvvm.swipetabfragments.folderlistfragment.ObservableFolderList;
+package com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment.ObservableFolderList;
 
 import android.content.Context;
 import android.os.Parcel;

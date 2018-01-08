@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.mvvm;
+package com.mn2square.videolistingmvp.mvvm.ui;
 
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepositoryImpl;

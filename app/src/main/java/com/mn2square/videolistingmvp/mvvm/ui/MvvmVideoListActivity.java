@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.mvvm;
+package com.mn2square.videolistingmvp.mvvm.ui;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -40,8 +40,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import java.io.File;
-
-import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.*;
 
 public class MvvmVideoListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener,
         SearchView.OnCloseListener, ViewMvpSearch.SearchVideo, ObservableScrollViewCallbacks, VideoUserInteraction {
@@ -122,7 +120,7 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
 
     public void searchClose() {
         mSearchView.setQuery("", false);
-        Log.d(TAG, "searchClose");
+        Log.d(MvvmVideoListViewModel.TAG, "searchClose");
         this.onVideoSearched("");
         mSearchView.onActionViewCollapsed();
     }
@@ -303,22 +301,22 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
     private void setSortingOptionChecked(Menu menu)
     {
         switch (mViewModel.mSortingType) {
-            case NAME_ASC:
+            case MvvmVideoListViewModel.NAME_ASC:
                 menu.findItem(R.id.sort_name_asc).setChecked(true);
                 break;
-            case NAME_DESC:
+            case MvvmVideoListViewModel.NAME_DESC:
                 menu.findItem(R.id.sort_name_dsc).setChecked(true);
                 break;
-            case DATE_ASC:
+            case MvvmVideoListViewModel.DATE_ASC:
                 menu.findItem(R.id.sort_date_asc).setChecked(true);
                 break;
-            case DATE_DESC:
+            case MvvmVideoListViewModel.DATE_DESC:
                 menu.findItem(R.id.sort_date_dsc).setChecked(true);
                 break;
-            case SIZE_ASC:
+            case MvvmVideoListViewModel.SIZE_ASC:
                 menu.findItem(R.id.sort_size_asc).setChecked(true);
                 break;
-            case SIZE_DESC:
+            case MvvmVideoListViewModel.SIZE_DESC:
                 menu.findItem(R.id.sort_size_dsc).setChecked(true);
                 break;
             default:
@@ -333,31 +331,31 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
         switch (id)
         {
             case R.id.sort_name_asc:
-                updateSharedPreferenceAndGetNewList(NAME_ASC);
+                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.NAME_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_name_dsc:
-                updateSharedPreferenceAndGetNewList(NAME_DESC);
+                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.NAME_DESC);
                 item.setChecked(true);
                 break;
             case R.id.sort_date_asc:
-                updateSharedPreferenceAndGetNewList(DATE_ASC);
+                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.DATE_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_date_dsc:
-                updateSharedPreferenceAndGetNewList(DATE_DESC);
+                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.DATE_DESC);
                 item.setChecked(true);
                 break;
             case R.id.sort_size_asc:
-                updateSharedPreferenceAndGetNewList(SIZE_ASC);
+                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.SIZE_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_size_dsc:
-                updateSharedPreferenceAndGetNewList(SIZE_DESC);
+                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.SIZE_DESC);
                 item.setChecked(true);
                 break;
             default:
-                updateSharedPreferenceAndGetNewList(DATE_DESC);
+                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.DATE_DESC);
                 item.setChecked(true);
         }
         if (id == R.id.action_settings) {

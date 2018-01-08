@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.mvvm.swipetabfragments.adapters;
+package com.mn2square.videolistingmvp.mvvm.ui.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;

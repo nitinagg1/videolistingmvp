@@ -1,13 +1,13 @@
-package com.mn2square.videolistingmvp.mvvm.swipetabfragments.folderlistfragment;
+package com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.mn2square.videolistingmvp.R;
-import com.mn2square.videolistingmvp.mvvm.VideoUserInteraction;
+import com.mn2square.videolistingmvp.mvvm.ui.VideoUserInteraction;
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
-import com.mn2square.videolistingmvp.mvvm.MvvmVideoListActivity;
-import com.mn2square.videolistingmvp.mvvm.swipetabfragments.adapters.FolderListAdapter;
-import com.mn2square.videolistingmvp.mvvm.swipetabfragments.folderlistfragment.ObservableFolderList.ObservableExpandableListView;
+import com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListActivity;
+import com.mn2square.videolistingmvp.mvvm.ui.adapters.FolderListAdapter;
+import com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment.ObservableFolderList.ObservableExpandableListView;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
