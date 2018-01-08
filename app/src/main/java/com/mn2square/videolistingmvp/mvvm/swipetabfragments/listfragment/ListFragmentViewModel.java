@@ -1,13 +1,11 @@
-package com.mn2square.videolistingmvp.mvvm.swipetabfragments.ListFragment;
+package com.mn2square.videolistingmvp.mvvm.swipetabfragments.listfragment;
 
-import com.mn2square.videolistingmvp.activity.presenter.manager.VideoListManager;
 import com.mn2square.videolistingmvp.activity.presenter.manager.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository.VideoListRepositoryImpl;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

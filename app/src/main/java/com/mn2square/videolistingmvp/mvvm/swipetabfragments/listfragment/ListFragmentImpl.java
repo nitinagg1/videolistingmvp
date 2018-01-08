@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.mvvm.swipetabfragments.ListFragment;
+package com.mn2square.videolistingmvp.mvvm.swipetabfragments.listfragment;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
