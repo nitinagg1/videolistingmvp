@@ -21,7 +21,7 @@ import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.NAME_DESC
 import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.SIZE_ASC;
 import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.SIZE_DESC;
 
-public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cursor>  {
+public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor>  {
     private static final int URL_LOADER_EXTERNAL = 0;
     private String mSearchText = "";
     private static final String[] COLUMNS_OF_INTEREST = new String[] {
@@ -38,20 +38,20 @@ public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cu
     private VideoListInfo mVideoListInfo;
     private MutableLiveData<VideoListInfo> mVideoListInfoLiveData;
     private int mSortingPreference;
-    private static VideoListRepositoryImpl sInstance;
+    private static VideoListRepository sInstance;
 
-    public static VideoListRepositoryImpl getInstance(Context context, int sortingPreference) {
+    public static VideoListRepository getInstance(Context context, int sortingPreference) {
         if (sInstance == null) {
-            synchronized (VideoListRepositoryImpl.class) {
+            synchronized (VideoListRepository.class) {
                 if (sInstance == null) {
-                    sInstance = new VideoListRepositoryImpl(context, sortingPreference);
+                    sInstance = new VideoListRepository(context, sortingPreference);
                 }
             }
         }
         return sInstance;
     }
 
-    private VideoListRepositoryImpl(Context context, int sortingPreference) {
+    private VideoListRepository(Context context, int sortingPreference) {
         mContext = context;
         mSortingPreference = sortingPreference;
 

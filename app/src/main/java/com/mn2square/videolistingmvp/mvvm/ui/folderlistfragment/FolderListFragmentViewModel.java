@@ -1,7 +1,7 @@
 package com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment;
 
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
-import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepositoryImpl;
+import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -24,7 +24,7 @@ public class FolderListFragmentViewModel extends AndroidViewModel {
     public static final String TAG = "FolderListViewModel";
     private static final String SORT_TYPE_PREFERENCE_KEY = "sort_type";
     protected MediatorLiveData<VideoListInfo> mVideoListInfoLiveData;
-    private VideoListRepositoryImpl mVideoListRepositoryImpl;
+    private VideoListRepository mVideoListRepositoryImpl;
 
     //need not be live, we will keep it in sync with mVideoListInfoLiveData
     protected ArrayList<String> mFolderNames;
@@ -34,7 +34,7 @@ public class FolderListFragmentViewModel extends AndroidViewModel {
         mVideoListInfoLiveData = new MediatorLiveData<>();
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(application);
-        mVideoListRepositoryImpl = VideoListRepositoryImpl.getInstance(application, settings.getInt(SORT_TYPE_PREFERENCE_KEY, 3));
+        mVideoListRepositoryImpl = VideoListRepository.getInstance(application, settings.getInt(SORT_TYPE_PREFERENCE_KEY, 3));
 
         mVideoListInfoLiveData.addSource(mVideoListRepositoryImpl.getVideoListInfoLiveData(), new Observer<VideoListInfo>() {
             @Override

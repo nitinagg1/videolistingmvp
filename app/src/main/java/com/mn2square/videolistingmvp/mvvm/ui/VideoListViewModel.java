@@ -1,7 +1,7 @@
 package com.mn2square.videolistingmvp.mvvm.ui;
 
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
-import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepositoryImpl;
+import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository;
 import android.app.Application;
 import android.app.LoaderManager;
 import android.arch.lifecycle.AndroidViewModel;
@@ -29,7 +29,7 @@ public class VideoListViewModel extends AndroidViewModel {
     public static final int RENAME_VIDEO = 2;
 
     public int mSortingType;
-    private VideoListRepositoryImpl mVideoListManagerImpl;
+    private VideoListRepository mVideoListManagerImpl;
     private MediatorLiveData<VideoListInfo> videoListInfoLiveData ;
 
     public MediatorLiveData<VideoListInfo> getVideoListInfoLiveData() {
@@ -44,7 +44,7 @@ public class VideoListViewModel extends AndroidViewModel {
         //should use dependency injection for testing
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(application);
         mSortingType = settings.getInt(SORT_TYPE_PREFERENCE_KEY, 3);
-        mVideoListManagerImpl = VideoListRepositoryImpl.getInstance(application, mSortingType);
+        mVideoListManagerImpl = VideoListRepository.getInstance(application, mSortingType);
 
         videoListInfoLiveData.addSource(mVideoListManagerImpl.getVideoListInfoLiveData(), new Observer<VideoListInfo>() {
             @Override

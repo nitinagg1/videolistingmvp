@@ -1,7 +1,7 @@
 package com.mn2square.videolistingmvp.mvvm.ui.savedlistfragment;
 
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
-import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepositoryImpl;
+import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -22,14 +22,14 @@ public class SavedListViewModel extends AndroidViewModel {
     private static final String SORT_TYPE_PREFERENCE_KEY = "sort_type";
 
     MediatorLiveData<VideoListInfo> mVideoListInfoLiveData;
-    VideoListRepositoryImpl mVideoListRepositoryImpl;
+    VideoListRepository mVideoListRepositoryImpl;
 
     public SavedListViewModel(@NonNull Application application) {
         super(application);
         mVideoListInfoLiveData = new MediatorLiveData<>();
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(application);
-        mVideoListRepositoryImpl = VideoListRepositoryImpl.getInstance(application, settings.getInt(SORT_TYPE_PREFERENCE_KEY, 3));
+        mVideoListRepositoryImpl = VideoListRepository.getInstance(application, settings.getInt(SORT_TYPE_PREFERENCE_KEY, 3));
 
         mVideoListInfoLiveData.addSource(mVideoListRepositoryImpl.getVideoListInfoLiveData(), new Observer<VideoListInfo>() {
             @Override
