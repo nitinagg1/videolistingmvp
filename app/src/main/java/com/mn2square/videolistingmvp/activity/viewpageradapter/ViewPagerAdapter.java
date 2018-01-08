@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.mn2square.videolistingmvp.mvvm.swipetabfragments.folderlistfragment.FolderListFragmentImpl;
 import com.mn2square.videolistingmvp.mvvm.swipetabfragments.listfragment.ListFragmentImpl;
+import com.mn2square.videolistingmvp.mvvm.swipetabfragments.savedlistfragment.SavedListFragmentImpl;
 
 /**
  * Created by nitinagarwal on 3/15/17.
@@ -41,8 +42,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return new FolderListFragmentImpl();
             case 1:
                 return new ListFragmentImpl();
-//            case 2:
-//                return new SavedListFragmentImpl();
+            case 2:
+                return new SavedListFragmentImpl();
             default:
                 return new ListFragmentImpl();
         }
