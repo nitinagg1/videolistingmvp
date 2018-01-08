@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository;
+package com.mn2square.videolistingmvp.mvvm.repository;
 
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.utils.FolderListGenerator;
@@ -21,7 +21,7 @@ import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.NAME_DES
 import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.SIZE_ASC;
 import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.SIZE_DESC;
 
-public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cursor>, VideoListRepository, VideoListUpdateManager {
+public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cursor>  {
     private static final int URL_LOADER_EXTERNAL = 0;
     private String mSearchText = "";
     private static final String[] COLUMNS_OF_INTEREST = new String[] {
@@ -42,7 +42,7 @@ public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cu
 
     public static VideoListRepositoryImpl getInstance(Context context, int sortingPreference) {
         if (sInstance == null) {
-            synchronized (VideoListRepository.class) {
+            synchronized (VideoListRepositoryImpl.class) {
                 if (sInstance == null) {
                     sInstance = new VideoListRepositoryImpl(context, sortingPreference);
                 }
@@ -62,7 +62,6 @@ public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cu
         return mVideoListInfoLiveData;
     }
 
-    @Override
     public void initLoader(LoaderManager loaderManager) {
         loaderManager.initLoader(URL_LOADER_EXTERNAL, null, this);
         mVideoListInfo = new VideoListInfo();
@@ -170,20 +169,17 @@ public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cu
 
     }
 
-    @Override
     public void getVideosWithNewSorting(int sortType, LoaderManager loaderManager) {
         mSortingPreference = sortType;
         loaderManager.restartLoader(URL_LOADER_EXTERNAL, null, this);
     }
 
-    @Override
     public void updateForDeleteVideo(int id) {
         mContext.getContentResolver().delete(
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 MediaStore.Video.Media._ID+ "=" + id, null);
     }
 
-    @Override
     public void updateForRenameVideo(int id, String newFilePath, String updatedTitle) {
 
         ContentValues contentValues = new ContentValues(2);
