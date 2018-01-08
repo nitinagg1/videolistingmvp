@@ -125,7 +125,7 @@ public class ListFragmentImpl extends Fragment implements VideoListFragmentInter
         super.onCreateContextMenu(menu, v, menuInfo);
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-        String selectedVideo = mVideoListInfo.getVideosList().get(info.position);
+        String selectedVideo = mVideoListInfo.getVideosList().get(info.position - 1);
         menu.setHeaderTitle(selectedVideo);
         MenuInflater menuInflater = getActivity().getMenuInflater();
         menuInflater.inflate(R.menu.menu_video_long_press, menu);
