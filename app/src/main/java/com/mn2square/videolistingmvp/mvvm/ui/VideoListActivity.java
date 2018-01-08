@@ -41,7 +41,7 @@ import android.widget.Toast;
 
 import java.io.File;
 
-public class MvvmVideoListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener,
+public class VideoListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener,
         SearchView.OnCloseListener, ViewMvpSearch.SearchVideo, ObservableScrollViewCallbacks, VideoUserInteraction {
     private View mRootView;
     private SearchView mSearchView;
@@ -54,7 +54,7 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
     private float mPixelDensityFactor;
     Window mWindow;
     int mBaseTranslationY;
-    private MvvmVideoListViewModel mViewModel;
+    private VideoListViewModel mViewModel;
 
 
     @Override
@@ -63,7 +63,7 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
         setupViews(this);
         setContentView(mRootView);
 
-        mViewModel = ViewModelProviders.of(this).get(MvvmVideoListViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(VideoListViewModel.class);
         mViewModel.initLoader(getLoaderManager());
     }
 
@@ -120,7 +120,7 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
 
     public void searchClose() {
         mSearchView.setQuery("", false);
-        Log.d(MvvmVideoListViewModel.TAG, "searchClose");
+        Log.d(VideoListViewModel.TAG, "searchClose");
         this.onVideoSearched("");
         mSearchView.onActionViewCollapsed();
     }
@@ -301,22 +301,22 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
     private void setSortingOptionChecked(Menu menu)
     {
         switch (mViewModel.mSortingType) {
-            case MvvmVideoListViewModel.NAME_ASC:
+            case VideoListViewModel.NAME_ASC:
                 menu.findItem(R.id.sort_name_asc).setChecked(true);
                 break;
-            case MvvmVideoListViewModel.NAME_DESC:
+            case VideoListViewModel.NAME_DESC:
                 menu.findItem(R.id.sort_name_dsc).setChecked(true);
                 break;
-            case MvvmVideoListViewModel.DATE_ASC:
+            case VideoListViewModel.DATE_ASC:
                 menu.findItem(R.id.sort_date_asc).setChecked(true);
                 break;
-            case MvvmVideoListViewModel.DATE_DESC:
+            case VideoListViewModel.DATE_DESC:
                 menu.findItem(R.id.sort_date_dsc).setChecked(true);
                 break;
-            case MvvmVideoListViewModel.SIZE_ASC:
+            case VideoListViewModel.SIZE_ASC:
                 menu.findItem(R.id.sort_size_asc).setChecked(true);
                 break;
-            case MvvmVideoListViewModel.SIZE_DESC:
+            case VideoListViewModel.SIZE_DESC:
                 menu.findItem(R.id.sort_size_dsc).setChecked(true);
                 break;
             default:
@@ -331,31 +331,31 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
         switch (id)
         {
             case R.id.sort_name_asc:
-                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.NAME_ASC);
+                updateSharedPreferenceAndGetNewList(VideoListViewModel.NAME_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_name_dsc:
-                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.NAME_DESC);
+                updateSharedPreferenceAndGetNewList(VideoListViewModel.NAME_DESC);
                 item.setChecked(true);
                 break;
             case R.id.sort_date_asc:
-                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.DATE_ASC);
+                updateSharedPreferenceAndGetNewList(VideoListViewModel.DATE_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_date_dsc:
-                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.DATE_DESC);
+                updateSharedPreferenceAndGetNewList(VideoListViewModel.DATE_DESC);
                 item.setChecked(true);
                 break;
             case R.id.sort_size_asc:
-                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.SIZE_ASC);
+                updateSharedPreferenceAndGetNewList(VideoListViewModel.SIZE_ASC);
                 item.setChecked(true);
                 break;
             case R.id.sort_size_dsc:
-                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.SIZE_DESC);
+                updateSharedPreferenceAndGetNewList(VideoListViewModel.SIZE_DESC);
                 item.setChecked(true);
                 break;
             default:
-                updateSharedPreferenceAndGetNewList(MvvmVideoListViewModel.DATE_DESC);
+                updateSharedPreferenceAndGetNewList(VideoListViewModel.DATE_DESC);
                 item.setChecked(true);
         }
         if (id == R.id.action_settings) {
@@ -411,11 +411,11 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
                                 if (deletedSuccessfully) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-                                        MediaScannerConnection.scanFile(MvvmVideoListActivity.this,
+                                        MediaScannerConnection.scanFile(VideoListActivity.this,
                                                 new String[]{videoPath}, null, null);
 
                                     } else {
-                                        MvvmVideoListActivity.this.sendBroadcast(new Intent(
+                                        VideoListActivity.this.sendBroadcast(new Intent(
                                                 Intent.ACTION_MEDIA_MOUNTED,
                                                 Uri.parse("file://"
                                                         + Environment.getExternalStorageDirectory())));
@@ -446,7 +446,7 @@ public class MvvmVideoListActivity extends AppCompatActivity implements SearchVi
                         extensionValue, renameVideoId, new LongPressOptions.OnConfirmRenameListener() {
                             @Override
                             public void onConfirm(String filename) {
-                                Context context = MvvmVideoListActivity.this;
+                                Context context = VideoListActivity.this;
                                 File fileToRename = new File(selectedVideoTitleForRename);
                                 File fileNameNew = new File(selectedVideoTitleForRename.replace(
                                         selectedVideoTitleForRename, filename));

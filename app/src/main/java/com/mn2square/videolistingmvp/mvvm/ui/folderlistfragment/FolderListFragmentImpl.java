@@ -5,7 +5,7 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.mn2square.videolistingmvp.R;
 import com.mn2square.videolistingmvp.mvvm.ui.VideoUserInteraction;
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
-import com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListActivity;
+import com.mn2square.videolistingmvp.mvvm.ui.VideoListActivity;
 import com.mn2square.videolistingmvp.mvvm.ui.adapters.FolderListAdapter;
 import com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment.ObservableFolderList.ObservableExpandableListView;
 
@@ -52,7 +52,7 @@ public class FolderListFragmentImpl extends Fragment {
         subscribeToViewModel(mFolderListFragmentViewModel);
         registerForContextMenu(mExpandableListView);
         try {
-            mCallback = ((MvvmVideoListActivity)getActivity());
+            mCallback = ((VideoListActivity)getActivity());
 
         } catch (ClassCastException ex) {
             throw new ClassCastException(getActivity().toString()
@@ -60,9 +60,9 @@ public class FolderListFragmentImpl extends Fragment {
         }
 
         try {
-            mObservableScrollViewCallbacks = (MvvmVideoListActivity) getActivity();
+            mObservableScrollViewCallbacks = (VideoListActivity) getActivity();
         } catch (ClassCastException ex) {
-            throw new ClassCastException("MvvmVideoListActivity must implement ObservalbleScrollViewCallbacks");
+            throw new ClassCastException("VideoListActivity must implement ObservalbleScrollViewCallbacks");
         }
 
         mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {

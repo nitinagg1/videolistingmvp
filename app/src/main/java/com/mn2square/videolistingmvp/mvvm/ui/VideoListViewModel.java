@@ -13,8 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-public class MvvmVideoListViewModel extends AndroidViewModel {
-    public static final String TAG = "MvvmVideoListViewModel";
+public class VideoListViewModel extends AndroidViewModel {
+    public static final String TAG = "VideoListViewModel";
     private static final String SORT_TYPE_PREFERENCE_KEY = "sort_type";
 
     public static final int NAME_ASC = 0;
@@ -36,7 +36,7 @@ public class MvvmVideoListViewModel extends AndroidViewModel {
         return videoListInfoLiveData;
     }
 
-    public MvvmVideoListViewModel(@NonNull Application application) {
+    public VideoListViewModel(@NonNull Application application) {
         super(application);
         videoListInfoLiveData = new MediatorLiveData<>();
 

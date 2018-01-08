@@ -14,12 +14,12 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
-import static com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListViewModel.DATE_ASC;
-import static com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListViewModel.DATE_DESC;
-import static com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListViewModel.NAME_ASC;
-import static com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListViewModel.NAME_DESC;
-import static com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListViewModel.SIZE_ASC;
-import static com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListViewModel.SIZE_DESC;
+import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.DATE_ASC;
+import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.DATE_DESC;
+import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.NAME_ASC;
+import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.NAME_DESC;
+import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.SIZE_ASC;
+import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.SIZE_DESC;
 
 public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cursor>  {
     private static final int URL_LOADER_EXTERNAL = 0;

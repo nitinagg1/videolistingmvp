@@ -4,9 +4,9 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.mn2square.videolistingmvp.R;
+import com.mn2square.videolistingmvp.mvvm.ui.VideoListActivity;
 import com.mn2square.videolistingmvp.mvvm.ui.VideoUserInteraction;
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
-import com.mn2square.videolistingmvp.mvvm.ui.MvvmVideoListActivity;
 import com.mn2square.videolistingmvp.mvvm.ui.adapters.VideoListAdapter;
 
 import android.arch.lifecycle.Observer;
@@ -51,13 +51,13 @@ public class SavedListFragmentImpl extends Fragment {
         registerForContextMenu(mSavedListView);
 
        try {
-            mCallback = ((MvvmVideoListActivity)getActivity());
+            mCallback = ((VideoListActivity)getActivity());
         } catch (ClassCastException ex) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement VideoUserInteraction");
         }
         try {
-            mObservableScrollViewCallbacks = (MvvmVideoListActivity) getActivity();
+            mObservableScrollViewCallbacks = (VideoListActivity) getActivity();
         } catch (ClassCastException ex) {
             throw new ClassCastException("videolistingactivityview must implement ObservalbleScrollViewCallbacks");
         }
