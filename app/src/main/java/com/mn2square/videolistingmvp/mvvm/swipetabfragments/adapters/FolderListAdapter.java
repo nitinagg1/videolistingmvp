@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.swipetabfragments.adapters;
+package com.mn2square.videolistingmvp.mvvm.swipetabfragments.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.mn2square.videolistingmvp.R;
 import com.mn2square.videolistingmvp.utils.Converters;
-import com.mn2square.videolistingmvp.activity.presenter.manager.pojo.VideoListInfo;
+import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.utils.thumbnailutils.CustomImageView;
 import com.mn2square.videolistingmvp.utils.thumbnailutils.ThumbnailCreateor;
 import com.mn2square.videolistingmvp.utils.thumbnailutils.BitmapCache;

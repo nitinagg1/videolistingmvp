@@ -4,10 +4,10 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.mn2square.videolistingmvp.R;
-import com.mn2square.videolistingmvp.activity.presenter.VideoUserInteraction;
-import com.mn2square.videolistingmvp.activity.presenter.manager.pojo.VideoListInfo;
+import com.mn2square.videolistingmvp.mvvm.VideoUserInteraction;
+import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.mvvm.MvvmVideoListActivity;
-import com.mn2square.videolistingmvp.swipetabfragments.adapters.VideoListAdapter;
+import com.mn2square.videolistingmvp.mvvm.swipetabfragments.adapters.VideoListAdapter;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;

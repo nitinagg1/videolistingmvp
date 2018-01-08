@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.activity.viewpageradapter;
+package com.mn2square.videolistingmvp.mvvm;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

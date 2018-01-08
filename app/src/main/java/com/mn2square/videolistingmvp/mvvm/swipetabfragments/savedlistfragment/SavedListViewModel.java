@@ -1,28 +1,17 @@
 package com.mn2square.videolistingmvp.mvvm.swipetabfragments.savedlistfragment;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableListView;
-import com.mn2square.videolistingmvp.R;
-import com.mn2square.videolistingmvp.activity.presenter.manager.pojo.VideoListInfo;
+import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository.VideoListRepositoryImpl;
-import com.mn2square.videolistingmvp.swipetabfragments.SavedListFragment.Views.SavedListView;
-import com.mn2square.videolistingmvp.swipetabfragments.adapters.VideoListAdapter;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import java.util.List;
 
 /**
  * Created by nitinagarwal on 3/13/17.

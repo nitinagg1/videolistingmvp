@@ -1,6 +1,6 @@
 package com.mn2square.videolistingmvp.mvvm.swipetabfragments.listfragment;
 
-import com.mn2square.videolistingmvp.activity.presenter.manager.pojo.VideoListInfo;
+import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository.VideoListRepositoryImpl;
 
 import android.app.Application;

@@ -1,4 +1,4 @@
-package com.mn2square.videolistingmvp.activity.views;
+package com.mn2square.videolistingmvp.mvvm;
 
 import android.view.MenuItem;
 

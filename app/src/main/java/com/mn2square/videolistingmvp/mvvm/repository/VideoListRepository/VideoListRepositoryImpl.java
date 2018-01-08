@@ -1,6 +1,6 @@
 package com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository;
 
-import com.mn2square.videolistingmvp.activity.presenter.manager.pojo.VideoListInfo;
+import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.utils.FolderListGenerator;
 import com.mn2square.videolistingmvp.utils.VideoSearch;
 
@@ -14,12 +14,12 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
-import static com.mn2square.videolistingmvp.activity.presenter.VideoListingActivity.DATE_ASC;
-import static com.mn2square.videolistingmvp.activity.presenter.VideoListingActivity.DATE_DESC;
-import static com.mn2square.videolistingmvp.activity.presenter.VideoListingActivity.NAME_ASC;
-import static com.mn2square.videolistingmvp.activity.presenter.VideoListingActivity.NAME_DESC;
-import static com.mn2square.videolistingmvp.activity.presenter.VideoListingActivity.SIZE_ASC;
-import static com.mn2square.videolistingmvp.activity.presenter.VideoListingActivity.SIZE_DESC;
+import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.DATE_ASC;
+import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.DATE_DESC;
+import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.NAME_ASC;
+import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.NAME_DESC;
+import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.SIZE_ASC;
+import static com.mn2square.videolistingmvp.mvvm.MvvmVideoListViewModel.SIZE_DESC;
 
 public class VideoListRepositoryImpl implements LoaderManager.LoaderCallbacks<Cursor>, VideoListRepository, VideoListUpdateManager {
     private static final int URL_LOADER_EXTERNAL = 0;

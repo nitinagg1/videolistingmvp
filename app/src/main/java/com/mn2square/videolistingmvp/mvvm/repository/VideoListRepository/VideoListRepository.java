@@ -1,7 +1,5 @@
 package com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository;
 
-import com.mn2square.videolistingmvp.activity.presenter.manager.pojo.VideoListInfo;
-
 import android.app.LoaderManager;
 
 /**
