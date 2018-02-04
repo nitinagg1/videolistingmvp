@@ -58,7 +58,12 @@ public class VideoListRepository {
         return mVideoListInfoLiveData;
     }
 
-    public void initVideoList(final int sortingPreference) {
+    public void initVideoList( int sortingPreference) {
+        mVideoListInfo = new VideoListInfo();
+        fetchVideoList(sortingPreference);
+    }
+
+    private void fetchVideoList(final int sortingPreference) {
         mAppExecutors.diskIO().execute(new Runnable() {
             @WorkerThread
             @Override
@@ -71,7 +76,6 @@ public class VideoListRepository {
                 onLoadFinished(cursor);
             }
         });
-        mVideoListInfo = new VideoListInfo();
     }
 
     private String getSortOrder(int sortingPreference) {
@@ -158,8 +162,8 @@ public class VideoListRepository {
     }
 
     public void getVideosWithNewSorting(int sortPreference) {
-        // Re-init video-list
-        initVideoList(sortPreference);
+        // Re-fetch video-list
+        fetchVideoList(sortPreference);
     }
 
     public void updateForDeleteVideo(int id) {
