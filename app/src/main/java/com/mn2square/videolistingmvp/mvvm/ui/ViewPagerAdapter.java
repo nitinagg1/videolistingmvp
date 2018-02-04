@@ -1,6 +1,5 @@
 package com.mn2square.videolistingmvp.mvvm.ui;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,30 +8,20 @@ import com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment.FolderListFragme
 import com.mn2square.videolistingmvp.mvvm.ui.listfragment.ListFragmentImpl;
 import com.mn2square.videolistingmvp.mvvm.ui.savedlistfragment.SavedListFragmentImpl;
 
-/**
- * Created by nitinagarwal on 3/15/17.
- */
-
-
 public class ViewPagerAdapter extends FragmentPagerAdapter {
-
-    Context mContext;
+    static final int NUM_ITEMS = 3;
     CharSequence[] mTitles;
 
-    public ViewPagerAdapter(FragmentManager fm, CharSequence[] titles)
-    {
+    public ViewPagerAdapter(FragmentManager fm, CharSequence[] titles) {
         super(fm);
         mTitles = titles;
     }
-
-
 
     @Override
     public CharSequence getPageTitle(int position) {
         return mTitles[position];
     }
 
-    static final int NUM_ITEMS = 3;
 
     @Override
     public Fragment getItem(int position) {
