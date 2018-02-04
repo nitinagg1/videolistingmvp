@@ -7,8 +7,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -28,8 +26,7 @@ public class SavedListViewModel extends AndroidViewModel {
         super(application);
         mVideoListInfoLiveData = new MediatorLiveData<>();
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(application);
-        mVideoListRepositoryImpl = VideoListRepository.getInstance(application, settings.getInt(SORT_TYPE_PREFERENCE_KEY, 3));
+        mVideoListRepositoryImpl = VideoListRepository.getInstance(application);
 
         mVideoListInfoLiveData.addSource(mVideoListRepositoryImpl.getVideoListInfoLiveData(), new Observer<VideoListInfo>() {
             @Override

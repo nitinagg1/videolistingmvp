@@ -64,7 +64,6 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         setContentView(mRootView);
 
         mViewModel = ViewModelProviders.of(this).get(VideoListViewModel.class);
-        mViewModel.initLoader(getLoaderManager());
     }
 
     private void setupViews(Context context) {
@@ -175,13 +174,11 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
                 break;
             default:
                 mAppBarLayout.setBackgroundResource(R.color.black_dialog_header);
-
         }
     }
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
     }
 
     @Override
@@ -210,7 +207,6 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
 
     @Override
     public void onDownMotionEvent() {
-
     }
 
     @Override
@@ -239,7 +235,6 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
     }
 
     private void hideToolbar() {
-
         float headerTranslationY = ViewHelper.getTranslationY(mAppBarLayout);
         float fabTranslationY = ViewHelper.getTranslationY(mFabRecondVideoButton);
         int toolbarHeight = mToolbar.getHeight();
@@ -251,8 +246,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
             ViewPropertyAnimator.animate(mAppBarLayout).translationY(-toolbarHeight).setDuration(200).start();
         }
 
-        if(fabTranslationY != floatingButtonHeight)
-        {
+        if(fabTranslationY != floatingButtonHeight) {
             ViewPropertyAnimator.animate(mFabRecondVideoButton).cancel();
             ViewPropertyAnimator.animate(mFabRecondVideoButton).translationY(floatingButtonHeight).setDuration(200).start();
         }
@@ -276,7 +270,6 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         getMenuInflater().inflate(R.menu.menu_main, menu);
         this.addSearchBar(menu.findItem(R.id.action_search));
 
-
         setSortingOptionChecked(menu);
         return true;
     }
@@ -293,8 +286,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         mSearchView.setOnCloseListener(this);
     }
 
-    private void setSortingOptionChecked(Menu menu)
-    {
+    private void setSortingOptionChecked(Menu menu) {
         switch (mViewModel.mSortingType) {
             case VideoListViewModel.NAME_ASC:
                 menu.findItem(R.id.sort_name_asc).setChecked(true);
@@ -323,8 +315,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id)
-        {
+        switch (id) {
             case R.id.sort_name_asc:
                 onSortTypeChanged(VideoListViewModel.NAME_ASC);
                 item.setChecked(true);
@@ -360,7 +351,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
     }
 
     private void onSortTypeChanged(int sortType) {
-        mViewModel.onSortTypeChanged(sortType, getLoaderManager());
+        mViewModel.onSortTypeChanged(sortType);
     }
 
     @Override

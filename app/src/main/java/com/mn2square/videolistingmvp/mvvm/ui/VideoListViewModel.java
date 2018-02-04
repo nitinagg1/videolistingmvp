@@ -3,7 +3,6 @@ package com.mn2square.videolistingmvp.mvvm.ui;
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
 import com.mn2square.videolistingmvp.mvvm.repository.VideoListRepository;
 import android.app.Application;
-import android.app.LoaderManager;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
@@ -24,10 +23,6 @@ public class VideoListViewModel extends AndroidViewModel {
     public static final int SIZE_ASC = 4;
     public static final int SIZE_DESC = 5;
 
-    public static final int SHARE_VIDEO = 0;
-    public static final int DELETE_VIDEO = 1;
-    public static final int RENAME_VIDEO = 2;
-
     public int mSortingType;
     private VideoListRepository mVideoListManagerImpl;
     private MediatorLiveData<VideoListInfo> videoListInfoLiveData ;
@@ -44,7 +39,7 @@ public class VideoListViewModel extends AndroidViewModel {
         //should use dependency injection for testing
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(application);
         mSortingType = settings.getInt(SORT_TYPE_PREFERENCE_KEY, 3);
-        mVideoListManagerImpl = VideoListRepository.getInstance(application, mSortingType);
+        mVideoListManagerImpl = VideoListRepository.getInstance(application);
 
         videoListInfoLiveData.addSource(mVideoListManagerImpl.getVideoListInfoLiveData(), new Observer<VideoListInfo>() {
             @Override
@@ -53,32 +48,20 @@ public class VideoListViewModel extends AndroidViewModel {
                 videoListInfoLiveData.setValue(videoListInfo);
             }
         });
-    }
-
-    public void initLoader(LoaderManager loaderManager) {
-        mVideoListManagerImpl.initLoader(loaderManager);
+        mVideoListManagerImpl.initVideoList(mSortingType);
     }
 
     public void onVideoSearched(String searchText) {
         //this will trigger update across everything
         mVideoListManagerImpl.filterVideos(searchText);
-//        mVideoListManagerImpl.updateVideoListInfo(videoListInfo);
-
-//                if(mListFragment != null)
-//                    mListFragment.bindVideoList(videoListInfo);
-//                if(mFolderListFragment != null)
-//                    mFolderListFragment.bindVideoList(videoListInfo);
-//                if(mSavedListFragment != null)
-//                    mListFragment.bindVideoList(videoListInfo);
-
     }
 
-    public void onSortTypeChanged(int sortType, LoaderManager loaderManager) {
+    public void onSortTypeChanged(int sortType) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getApplication());
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(SORT_TYPE_PREFERENCE_KEY, sortType);
         editor.apply();
-        mVideoListManagerImpl.getVideosWithNewSorting(sortType, loaderManager);
+        mVideoListManagerImpl.getVideosWithNewSorting(sortType);
     }
 
     public void updateForRenameVideo(int id, String newFilePath, String updatedTitle) {

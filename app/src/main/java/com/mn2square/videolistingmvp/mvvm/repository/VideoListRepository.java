@@ -1,18 +1,16 @@
 package com.mn2square.videolistingmvp.mvvm.repository;
 
 import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
+import com.mn2square.videolistingmvp.utils.AppExecutors;
 import com.mn2square.videolistingmvp.utils.FolderListGenerator;
 import com.mn2square.videolistingmvp.utils.VideoSearch;
 
-import android.app.LoaderManager;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.WorkerThread;
 
 import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.DATE_ASC;
 import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.DATE_DESC;
@@ -21,9 +19,9 @@ import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.NAME_DESC
 import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.SIZE_ASC;
 import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.SIZE_DESC;
 
-public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor>  {
-    private static final int URL_LOADER_EXTERNAL = 0;
+public class VideoListRepository {
     private String mSearchText = "";
+    private AppExecutors mAppExecutors;
     private static final String[] COLUMNS_OF_INTEREST = new String[] {
             MediaStore.Video.Media._ID,
             MediaStore.Video.Media.DATA,
@@ -37,24 +35,22 @@ public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor
     private Context mContext;
     private VideoListInfo mVideoListInfo;
     private MutableLiveData<VideoListInfo> mVideoListInfoLiveData;
-    private int mSortingPreference;
     private static VideoListRepository sInstance;
 
-    public static VideoListRepository getInstance(Context context, int sortingPreference) {
+    public static VideoListRepository getInstance(Context context) {
         if (sInstance == null) {
             synchronized (VideoListRepository.class) {
                 if (sInstance == null) {
-                    sInstance = new VideoListRepository(context, sortingPreference);
+                    sInstance = new VideoListRepository(context);
                 }
             }
         }
         return sInstance;
     }
 
-    private VideoListRepository(Context context, int sortingPreference) {
+    private VideoListRepository(Context context) {
         mContext = context;
-        mSortingPreference = sortingPreference;
-
+        mAppExecutors = AppExecutors.getInstance();
         mVideoListInfoLiveData = new MutableLiveData<>();
     }
 
@@ -62,51 +58,47 @@ public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor
         return mVideoListInfoLiveData;
     }
 
-    public void initLoader(LoaderManager loaderManager) {
-        loaderManager.initLoader(URL_LOADER_EXTERNAL, null, this);
+    public void initVideoList(final int sortingPreference) {
+        mAppExecutors.diskIO().execute(new Runnable() {
+            @WorkerThread
+            @Override
+            public void run() {
+                final Cursor cursor = mContext.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        COLUMNS_OF_INTEREST,
+                        null,
+                        null,
+                        getSortOrder(sortingPreference));
+                onLoadFinished(cursor);
+            }
+        });
         mVideoListInfo = new VideoListInfo();
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        switch (mSortingPreference) {
+    private String getSortOrder(int sortingPreference) {
+        switch (sortingPreference) {
             case NAME_ASC:
-                return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, COLUMNS_OF_INTEREST, null, null,
-                        MediaStore.Video.Media.DISPLAY_NAME + " ASC");
+                return MediaStore.Video.Media.DISPLAY_NAME + " ASC";
             case NAME_DESC:
-                return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, COLUMNS_OF_INTEREST, null, null,
-                        MediaStore.Video.Media.DISPLAY_NAME + " DESC");
+                return MediaStore.Video.Media.DISPLAY_NAME + " DESC";
             case DATE_ASC:
-                return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, COLUMNS_OF_INTEREST, null, null,
-                        MediaStore.Video.Media.DATE_ADDED + " ASC");
+                return MediaStore.Video.Media.DATE_ADDED + " ASC";
             case DATE_DESC:
-                return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, COLUMNS_OF_INTEREST, null, null,
-                        MediaStore.Video.Media.DATE_ADDED + " DESC");
+                return MediaStore.Video.Media.DATE_ADDED + " DESC";
             case SIZE_ASC:
-                return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, COLUMNS_OF_INTEREST, null, null,
-                        MediaStore.Video.Media.SIZE + " ASC");
+                return MediaStore.Video.Media.SIZE + " ASC";
             case SIZE_DESC:
-                return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, COLUMNS_OF_INTEREST, null, null,
-                        MediaStore.Video.Media.SIZE + " DESC");
+                return MediaStore.Video.Media.SIZE + " DESC";
             default:
-                return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, COLUMNS_OF_INTEREST, null, null,
-                        MediaStore.Video.Media.DATE_ADDED + " DESC");
+                return MediaStore.Video.Media.DATE_ADDED + " DESC";
         }
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
-    {
-        if(cursor != null)
-        {
-            updateVideoList(cursor);
-
-            FolderListGenerator.generateFolderHashMap(mVideoListInfo.getVideoListBackUp(),
-                    mVideoListInfo.getFolderListHashMapBackUp());
-
-            //fire update
-            updateVideoListInfo(mVideoListInfo, mSearchText);
-        }
+    private void onLoadFinished(Cursor cursor) {
+        updateVideoList(cursor);
+        FolderListGenerator.generateFolderHashMap(mVideoListInfo.getVideoListBackUp(),
+                mVideoListInfo.getFolderListHashMapBackUp());
+        //fire update
+        updateVideoListInfo(mVideoListInfo, mSearchText);
     }
 
     /**
@@ -118,11 +110,13 @@ public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor
         mSearchText = filter;
 
         if(filter.trim().equals("")) {
+            // If no filter
             videoListInfo.getVideosList().clear();
             videoListInfo.getVideosList().addAll(videoListInfo.getVideoListBackUp());
             videoListInfo.getFolderListHashMap().clear();
             videoListInfo.getFolderListHashMap().putAll(videoListInfo.getFolderListHashMapBackUp());
         } else {
+            // Filter present
             videoListInfo.setVideosList(VideoSearch.SearchResult(filter, videoListInfo.getVideoListBackUp()));
             videoListInfo.setFolderListHashMap(VideoSearch.SearchResult(filter,
                     videoListInfo.getFolderListHashMapBackUp()));
@@ -131,7 +125,8 @@ public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor
         videoListInfo.setSavedVideoList(FolderListGenerator.getSavedVideoListFromFolderHashMap(
                 videoListInfo.getFolderListHashMap()));
 
-        mVideoListInfoLiveData.setValue(videoListInfo);
+        // Update on UIThread
+        mVideoListInfoLiveData.postValue(videoListInfo);
     }
 
     public void filterVideos(String text) {
@@ -139,12 +134,7 @@ public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor
     }
 
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-    }
-    
-    private void updateVideoList(Cursor cursor)
-    {
+    private void updateVideoList(Cursor cursor) {
         mVideoListInfo.clearAll();
         cursor.moveToFirst();
         int coloumnIndexUri = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
@@ -163,15 +153,13 @@ public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor
             mVideoListInfo.getVideoDurationHashMap().put(cursor.getString(coloumnIndexUri), cursor.getInt(coloumnIndex));
             coloumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE);
             mVideoListInfo.getVideoSizeHashMap().put(cursor.getString(coloumnIndexUri), cursor.getInt(coloumnIndex));
-
             cursor.moveToNext();
         }
-
     }
 
-    public void getVideosWithNewSorting(int sortType, LoaderManager loaderManager) {
-        mSortingPreference = sortType;
-        loaderManager.restartLoader(URL_LOADER_EXTERNAL, null, this);
+    public void getVideosWithNewSorting(int sortPreference) {
+        // Re-init video-list
+        initVideoList(sortPreference);
     }
 
     public void updateForDeleteVideo(int id) {
@@ -181,7 +169,6 @@ public class VideoListRepository implements LoaderManager.LoaderCallbacks<Cursor
     }
 
     public void updateForRenameVideo(int id, String newFilePath, String updatedTitle) {
-
         ContentValues contentValues = new ContentValues(2);
         contentValues.put(MediaStore.Video.Media.DATA, newFilePath);
         contentValues.put(MediaStore.Video.Media.DISPLAY_NAME, updatedTitle);
