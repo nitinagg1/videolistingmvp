@@ -9,6 +9,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,6 +66,26 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         setContentView(mRootView);
 
         mViewModel = ViewModelProviders.of(this).get(VideoListViewModel.class);
+        subscribeToViewModel();
+    }
+
+    protected void subscribeToViewModel() {
+        mViewModel.getToastMessageLiveData().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                Toast.makeText(VideoListActivity.this, s, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mViewModel.getStatusBarColorLiveData().observe(this, new Observer<Pair<Integer, Integer>>() {
+            @Override
+            public void onChanged(@Nullable Pair<Integer, Integer> colorPair) {
+                mAppBarLayout.setBackgroundResource(colorPair.first);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mWindow.setStatusBarColor(mContext.getResources().getColor(colorPair.second));
+                }
+            }
+        });
     }
 
     private void setupViews(Context context) {
@@ -112,7 +134,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         mFabRecondVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext,"fab clicked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext,"fab clicked", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -123,21 +145,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_settings) {
-            Toast.makeText(mContext, "settings Clicked", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_gallery) {
-            Toast.makeText(mContext, "gallery Clicked", Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_help) {
-            Toast.makeText(mContext, "hep Clicked", Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_share) {
-            Toast.makeText(mContext, "share Clicked", Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_buy_pro) {
-            Toast.makeText(mContext, "buy pro Clicked", Toast.LENGTH_SHORT).show();
-
-        }
+        mViewModel.onNavigationItemSelected(id);
 
         DrawerLayout drawer = (DrawerLayout) mRootView.findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -146,28 +154,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        switch (tab.getPosition()) {
-            case 0:
-                mAppBarLayout.setBackgroundResource(R.color.black_dialog_header);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mWindow.setStatusBarColor(mContext.getResources().getColor(R.color.transparent_black));
-                }
-                break;
-            case 1:
-                mAppBarLayout.setBackgroundResource(R.color.colorPrimary);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mWindow.setStatusBarColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-                }
-                break;
-            case 2:
-                mAppBarLayout.setBackgroundResource(R.color.primary);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mWindow.setStatusBarColor(mContext.getResources().getColor(R.color.primaryDark));
-                }
-                break;
-            default:
-                mAppBarLayout.setBackgroundResource(R.color.black_dialog_header);
-        }
+        mViewModel.onTabSelected(tab.getPosition());
     }
 
     @Override
@@ -212,7 +199,6 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
             hideToolbar();
         }
     }
-
 
     private void showToolbar() {
         float headerTranslationY = ViewHelper.getTranslationY(mAppBarLayout);
@@ -367,7 +353,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
 
     @Override
     public void onVideoSelected(String videoPath) {
-        Toast.makeText(this, videoPath + "clicked", Toast.LENGTH_SHORT).show();
+        mViewModel.onVideoSelected(videoPath);
     }
 
     @Override
