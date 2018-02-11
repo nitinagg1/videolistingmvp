@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.mn2square.videolistingmvp.swipetabfragments.folderlistfragment.ObservableFolderList.ObservableExpandableListView
+    <com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment.ObservableFolderList.ObservableExpandableListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@drawable/folderlisting_divider"
@@ -13,5 +13,5 @@
         android:fastScrollEnabled="true"
         android:childDivider="@drawable/video_listing_dividers"
         android:id="@+id/expandablelistview">
-    </com.mn2square.videolistingmvp.swipetabfragments.folderlistfragment.ObservableFolderList.ObservableExpandableListView>
+    </com.mn2square.videolistingmvp.mvvm.ui.folderlistfragment.ObservableFolderList.ObservableExpandableListView>
 </RelativeLayout>
