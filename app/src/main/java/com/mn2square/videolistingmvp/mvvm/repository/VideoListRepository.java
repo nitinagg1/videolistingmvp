@@ -8,7 +8,11 @@ import com.mn2square.videolistingmvp.utils.VideoSearch;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.WorkerThread;
 
@@ -19,7 +23,7 @@ import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.NAME_DESC
 import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.SIZE_ASC;
 import static com.mn2square.videolistingmvp.mvvm.ui.VideoListViewModel.SIZE_DESC;
 
-public class VideoListRepository {
+public class VideoListRepository extends ContentObserver {
     private String mSearchText = "";
     private AppExecutors mAppExecutors;
     private static final String[] COLUMNS_OF_INTEREST = new String[] {
@@ -36,6 +40,8 @@ public class VideoListRepository {
     private VideoListInfo mVideoListInfo;
     private MutableLiveData<VideoListInfo> mVideoListInfoLiveData;
     private static VideoListRepository sInstance;
+    private Cursor mCursor;
+    private int mSortingPref;
 
     public static VideoListRepository getInstance(Context context) {
         if (sInstance == null) {
@@ -49,6 +55,7 @@ public class VideoListRepository {
     }
 
     private VideoListRepository(Context context) {
+        super(new Handler(Looper.myLooper()));
         mContext = context;
         mAppExecutors = AppExecutors.getInstance();
         mVideoListInfoLiveData = new MutableLiveData<>();
@@ -58,24 +65,33 @@ public class VideoListRepository {
         return mVideoListInfoLiveData;
     }
 
-    public void initVideoList( int sortingPreference) {
+    public void initVideoList(int sortingPreference) {
+        mSortingPref = sortingPreference;
         mVideoListInfo = new VideoListInfo();
         fetchVideoList(sortingPreference);
     }
+
 
     private void fetchVideoList(final int sortingPreference) {
         mAppExecutors.diskIO().execute(new Runnable() {
             @WorkerThread
             @Override
             public void run() {
-                final Cursor cursor = mContext.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                mCursor = mContext.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                         COLUMNS_OF_INTEREST,
                         null,
                         null,
                         getSortOrder(sortingPreference));
-                onLoadFinished(cursor);
+                mCursor.registerContentObserver(VideoListRepository.this);
+                onLoadFinished(mCursor);
             }
         });
+    }
+
+    @Override
+    public void onChange(boolean selfChange, Uri uri) {
+        mCursor.unregisterContentObserver(this);
+        fetchVideoList(mSortingPref);
     }
 
     private String getSortOrder(int sortingPreference) {

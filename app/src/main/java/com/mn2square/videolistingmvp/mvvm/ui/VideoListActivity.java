@@ -4,6 +4,8 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.mn2square.videolistingmvp.R;
+import com.mn2square.videolistingmvp.mvvm.pojo.VideoListInfo;
+import com.mn2square.videolistingmvp.mvvm.pojo.VideoRenameEvent;
 import com.mn2square.videolistingmvp.utils.longpressmenuoptions.LongPressOptions;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
@@ -67,6 +69,7 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
 
         mViewModel = ViewModelProviders.of(this).get(VideoListViewModel.class);
         subscribeToViewModel();
+        subscribeToViewModelForFileEvents();
     }
 
     protected void subscribeToViewModel() {
@@ -86,6 +89,48 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
                 }
             }
         });
+        mViewModel.getVideoListInfoLiveData().observe(this, new Observer<VideoListInfo>() {
+            @Override
+            public void onChanged(@Nullable VideoListInfo videoListInfo) {
+
+            }
+        });
+    }
+
+    private void subscribeToViewModelForFileEvents() {
+        mViewModel.getShowDeleteDialogEvent().observe(this, new Observer<Pair<Integer, String>>() {
+            @Override
+            public void onChanged(@Nullable Pair<Integer, String> fileInfo) {
+                final int deleteVideoId = fileInfo.first;
+                final String videoPath = fileInfo.second;
+                LongPressOptions.deleteFile(VideoListActivity.this, videoPath,
+                        deleteVideoId,
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mViewModel.deleteVideo(deleteVideoId, videoPath);
+                            }
+                        }
+                );
+            }
+        });
+
+        mViewModel.getShowRenameDialogEvent().observe(this, new Observer<VideoRenameEvent>() {
+            @Override
+            public void onChanged(@Nullable final VideoRenameEvent videoRenameEvent) {
+                LongPressOptions.renameFile(VideoListActivity.this, videoRenameEvent.getCurrentTitle(),
+                        videoRenameEvent.getVideoPath(),
+                        videoRenameEvent.getExtension(),
+                        videoRenameEvent.getVideoId(),
+                        new LongPressOptions.OnConfirmRenameListener() {
+                            @Override
+                            public void onConfirm(String fileName) {
+                                mViewModel.renameVideo(videoRenameEvent, fileName);
+                            }
+                        }
+                );
+            }
+        });
     }
 
     private void setupViews(Context context) {
@@ -97,12 +142,11 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         mRootView = LayoutInflater.from(context).inflate(R.layout.activity_main, null);
         mViewPager = (ViewPager)mRootView.findViewById(R.id.viewpager);
         mViewPager.setCurrentItem(0);
-        CharSequence[] titles =
-                {context.getResources().getString(R.string.folder_tab_name),
-                        context.getResources().getString(R.string.list_tab_name),
-                        context.getResources().getString(R.string.saved_tab_name),
-//                getResources().getString(R.string.recent_tab_name)
-    };
+        CharSequence[] titles = {
+                context.getResources().getString(R.string.folder_tab_name),
+                context.getResources().getString(R.string.list_tab_name),
+                context.getResources().getString(R.string.saved_tab_name),
+        };
         ViewPagerAdapter viewPagerAdapter =
                 new ViewPagerAdapter(appCompatActivity.getSupportFragmentManager(), titles);
         mViewPager.setAdapter(viewPagerAdapter);
@@ -363,71 +407,8 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
                 LongPressOptions.shareFile(this, videoPath);
                 break;
 
-            case R.id.long_press_menu_delete:
-                final int deleteVideoId = mViewModel.getVideoListInfoLiveData().getValue().getVideoIdHashMap().get(videoPath);
-                LongPressOptions.deleteFile(this, videoPath,
-                        deleteVideoId,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                File fileToDelete = new File(videoPath);
-                                boolean deletedSuccessfully = fileToDelete.delete();
-                                if (deletedSuccessfully) {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-                                        MediaScannerConnection.scanFile(VideoListActivity.this,
-                                                new String[]{videoPath}, null, null);
-
-                                    } else {
-                                        VideoListActivity.this.sendBroadcast(new Intent(
-                                                Intent.ACTION_MEDIA_MOUNTED,
-                                                Uri.parse("file://"
-                                                        + Environment.getExternalStorageDirectory())));
-                                    }
-                                    mViewModel.updateForDeleteVideo(deleteVideoId);
-                                }
-
-                            }
-                        });
-                Log.d("nitin123", "we are here");
-                break;
-
-            case R.id.long_press_menu_rename:
-                String selectedVideoTitleWithExtension = mViewModel.getVideoListInfoLiveData().getValue().getVideoTitleHashMap().get(videoPath);
-                int index = selectedVideoTitleWithExtension.lastIndexOf('.');
-                final String selectedVideoTitleForRename;
-                final String extensionValue;
-                if (index > 0) {
-                    selectedVideoTitleForRename = selectedVideoTitleWithExtension.substring(0, index);
-                    extensionValue = selectedVideoTitleWithExtension.substring(index, selectedVideoTitleWithExtension.length());
-                } else {
-                    selectedVideoTitleForRename = selectedVideoTitleWithExtension;
-                    extensionValue = "";
-                }
-
-                final int renameVideoId = mViewModel.getVideoListInfoLiveData().getValue().getVideoIdHashMap().get(videoPath);
-                LongPressOptions.renameFile(this, selectedVideoTitleForRename, videoPath,
-                        extensionValue, renameVideoId, new LongPressOptions.OnConfirmRenameListener() {
-                            @Override
-                            public void onConfirm(String filename) {
-                                Context context = VideoListActivity.this;
-                                File fileToRename = new File(selectedVideoTitleForRename);
-                                File fileNameNew = new File(selectedVideoTitleForRename.replace(
-                                        selectedVideoTitleForRename, filename));
-                                if(fileNameNew.exists()) {
-                                    Toast.makeText(context,
-                                            context.getResources().getString(R.string.same_title_exists), Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    String updatedTitle = filename + extensionValue;
-                                    fileToRename.renameTo(fileNameNew);
-
-                                    String newFilePath = fileNameNew.toString();
-                                    mViewModel.updateForRenameVideo(renameVideoId,
-                                            newFilePath, updatedTitle);
-                                }
-                            }
-                        });
+            default:
+                mViewModel.onVideoLongPressed(videoPath, itemId);
                 break;
         }
     }
