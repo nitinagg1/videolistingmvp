@@ -42,7 +42,7 @@ import android.widget.Toast;
 import java.io.File;
 
 public class VideoListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener,
-        SearchView.OnCloseListener, ViewMvpSearch.SearchVideo, ObservableScrollViewCallbacks, VideoUserInteraction {
+        SearchView.OnCloseListener, ObservableScrollViewCallbacks, VideoUserInteraction {
     private View mRootView;
     private SearchView mSearchView;
     private ViewPager mViewPager;
@@ -115,13 +115,6 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
                 Toast.makeText(mContext,"fab clicked", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    public void searchClose() {
-        mSearchView.setQuery("", false);
-        Log.d(VideoListViewModel.TAG, "searchClose");
-        this.onVideoSearched("");
-        mSearchView.onActionViewCollapsed();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -274,7 +267,6 @@ public class VideoListActivity extends AppCompatActivity implements SearchView.O
         return true;
     }
 
-    @Override
     public void onVideoSearched(String seachText) {
         mViewModel.onVideoSearched(seachText);
     }
