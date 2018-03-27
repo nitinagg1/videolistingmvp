@@ -1,5 +1,5 @@
 # videolistingmvp
-Android video listing with swipe view tabs based on mvp design pattern with complete functionalities like searching and sorting
+Android video listing with swipe view tabs based on mvp design pattern with complete functionalities including searching, sorting, caching etc which are listed below:
 
 # Features
 1. Auto Update of video listing
